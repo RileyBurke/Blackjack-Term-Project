@@ -3,7 +3,7 @@
 Blackjack term project for Python
 
 Group Members:
-Riley Burke
-Nathan Atkins
-Daniel Rowe
-Nicholas Baker
+Riley Burke - https://github.com/RileyBurke/
+Nathan Atkins - https://github.com/Venombane
+Daniel Rowe - https://github.com/dcr041
+Nicholas Baker - https://github.com/nicholasjamesbaker
