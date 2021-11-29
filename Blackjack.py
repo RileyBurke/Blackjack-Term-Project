@@ -31,9 +31,6 @@ def saveDealerStatistics(dealerStats): #Untested
         print("An unexpected exception occured - closing program")
         sys.exit()
 
-def playerBank():
-    pass
-
 def bet(): 
     pass #Min 5, max 1000
 
