@@ -32,7 +32,7 @@ def saveDealerStatistics(dealerStats): #Untested
         print("An unexpected exception occured - closing program")
         sys.exit()
 
-def bet(): 
+def bet(): #Nathan
     pass #Min 5, max 1000
 
 def deckOfCards(deck):    #Functional
@@ -46,7 +46,10 @@ def deckOfCards(deck):    #Functional
             ["Spades", "10"], ["Spades" , "Jack"], ["Spades", "Queen"], ["Spades", "King"], ["Spades", "Ace"]]
     deck += hearts + diamonds + clubs + spades
     
-def hitMe():
+def hit(): #Daniel
+    pass
+
+def stand():
     pass
 
 def play():
@@ -56,7 +59,7 @@ def checkBalance(playerBank):
     print("You have $" + str(playerBank) + " in funds.")
     print()
     
-def payout():
+def payout(): #3:2 for 21, 1:1 for no blackjack    Riley
     pass
 
 def mainMenu():
@@ -72,10 +75,10 @@ def greeting():
     print("Welcome to the Eric Stock Casino!")
     print()
 
-def addFunds(playerBank):
+def addFunds(playerBank): #Nick
     pass
 
-def enterCommand(command):
+def enterCommand(command, playerBank):
     pass
 
 def main():
