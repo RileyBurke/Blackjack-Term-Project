@@ -1,5 +1,6 @@
 import random
 import csv
+import sys
 
 def shuffleDeck(deck):   #Functional
     deck.clear()
