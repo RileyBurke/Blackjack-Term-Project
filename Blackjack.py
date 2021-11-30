@@ -58,6 +58,9 @@ def checkBalance(playerBank):
 def payout():
     pass
 
+def test():
+    pass
+
 def mainMenu():
     print("Blackjack")
     print()
