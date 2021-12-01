@@ -2,6 +2,18 @@ import random
 import csv
 import sys
 
+def getCardValue(drawnCard, total): #Untested
+    if drawnCard[1] == "2" or card[1] == "3" or card[1] == "4" or card[1] == "5" or card[1] == "6" or card[1] == "7" or card[1] == "8" or card[1] == "9":
+        cardValue = int(card[1])
+    elif drawnCard[1] == "10" or card[1] == "Jack" or card[1] == "Queen" or card[1] == "King":
+        cardValue = 10
+    elif drawnCard[1] == "Ace": #1 or 11 based upon current total
+        if total >= 11:
+            cardValue = 1
+        else:
+            cardValue = 11
+    return cardValue
+
 def shuffleDeck(deck):   #Functional
     deck.clear()
     deckOfCards(deck)
@@ -59,9 +71,14 @@ def checkBalance(playerBank):
     print("You have $" + str(playerBank) + " in funds.")
     print()
     
-def payout(): #3:2 for 21, 1:1 for no blackjack    Riley
-    pass
-
+def payout(bet, playerBank, total): #3:2 for 21, 1:1 for no blackjack    Riley
+    if total == 21:
+        payout = round(bet * 2.5, 2)
+    else:
+        payout = round(bet * 2, 2)
+    playerBank += payout
+    return playerBank
+        
 def mainMenu():
     print("Blackjack")
     print()
@@ -81,11 +98,25 @@ def addFunds(playerBank): #Nick
 def enterCommand(command, playerBank):
     pass
 
+def setNumberOfPlayers():
+    while True:
+        try:
+            numberOfPlayers = int(input("How many players? (1-5): "))
+            if numberOfPlayers > 0 and numberOfPlayers < 6:
+                return numberOfPlayers
+                break
+            else:
+                print("Invalid number of players. Must be a number from 1 to 5.")
+                continue
+        except ValueError:
+            print("Invalid number of players. Must be a number from 1 to 5.")
+
 def main():
     deck = []
     dealerStats = loadDealerStatistics()
     deckOfCards(deck)
     greeting()
+    numberOfPlayers = setNumberOfPlayers()
     playerBank = int(input("How much money would you like to enter?: $"))
     print()
     mainMenu()
@@ -95,13 +126,6 @@ def main():
             break
         except ValueError:
             print("Invalid option")
-
-                    
-    
-    print(deck)         #Testing deck
-    print(len(deck))
-    shuffleDeck(deck)
-    print(deck)
 
 if __name__ == "__main__":
     main()
