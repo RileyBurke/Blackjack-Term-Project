@@ -76,7 +76,23 @@ def greeting():
     print()
 
 def addFunds(playerBank): #Nick
+<<<<<<< Updated upstream
     pass
+=======
+    while True:
+        try:
+            added_funds = int(input("How much money would you like to add? (1 - 1000): $"))
+            if added_funds < 0 or added_funds > 1000:
+                print("Invalid amount entered, try again.")
+            else:
+                print("Added $" + str(added_funds) + " to your bank.")
+                playerBank+=added_funds
+                break
+        except ValueError:
+            print("Invalid integer amount entered, try again.")
+    print(playerBank)
+    return playerBank
+>>>>>>> Stashed changes
 
 def enterCommand(command, playerBank):
     pass
@@ -88,6 +104,10 @@ def main():
     greeting()
     playerBank = int(input("How much money would you like to enter?: $"))
     print()
+    #Testing add funds
+    addFunds(playerBank)
+    checkBalance(playerBank)
+    
     mainMenu()
     while True:
         try:
@@ -97,11 +117,6 @@ def main():
             print("Invalid option")
 
                     
-    
-    print(deck)         #Testing deck
-    print(len(deck))
-    shuffleDeck(deck)
-    print(deck)
 
 if __name__ == "__main__":
     main()
