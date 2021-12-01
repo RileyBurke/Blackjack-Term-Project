@@ -33,7 +33,19 @@ def saveDealerStatistics(dealerStats): #Untested
         sys.exit()
 
 def bet(): #Nathan
-    pass #Min 5, max 1000
+    while True:  #Min 5, max 1000
+        try:
+            bet = int(input("Enter a bet between $5 and $1000: $"))
+        except ValueError:
+            print("Invalid integer entered. Please try again")
+            continue
+        except Exception:
+            print("An unexpected exception occured")
+            continue
+        if bet < 5 or bet > 1000:
+            print("Invalid bet entered. Please enter a bet between $5 and $1000")
+            continue
+        return bet
 
 def deckOfCards(deck):    #Functional
     hearts = [["Hearts", "2"], ["Hearts" , "3"], ["Hearts", "4"], ["Hearts", "5"], ["Hearts", "6"], ["Hearts" , "7"], ["Hearts", "8"], ["Hearts", "9"],
