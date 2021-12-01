@@ -44,23 +44,31 @@ def saveDealerStatistics(dealerStats): #Untested
         print("An unexpected exception occured - closing program")
         sys.exit()
 
-def bet(playerBanks, numberOfPlayers): #To be fixed for list banks
-    while True:  
-        try:
-            bet = int(input("Enter a bet between $5 and $1000: $"))
-            if bet < 5 or bet > 1000:
-                print("Invalid bet entered. Please enter a bet between $5 and $1000")
+def getBets(playerBanks, numberOfPlayers): #untested
+    playerBets = []
+    counter = 0
+    for counter in range(1, numberOfPlayers):
+        while True:  
+            try:
+                bet = int(input("Enter a bet between $5 and $1000: $"))
+                if bet < 5 or bet > 1000:
+                    print("Invalid bet entered. Please enter a bet between $5 and $1000")
+                    continue
+                elif bet <= playerBanks[counter]:
+                    playerBanks[counter] - bet
+                    playerBets.append(bet)
+                else:
+                    print("Not enough funds. You have $" + str(playerBanks[counter]))
+                    print()
+            except ValueError:
+                print("Invalid integer entered. Please try again")
+                print()
                 continue
-            elif bet <= playerBank:
-                return bet
-            else:
-                print("Not enough funds. You have $" + str(playerBank))
-        except ValueError:
-            print("Invalid integer entered. Please try again")
-            continue
-        except Exception:
-            print("An unexpected exception occured")
-            continue
+            except Exception:
+                print("An unexpected exception occured")
+                print()
+                continue
+    return playerBets
 
 def deckOfCards():    #Functional
     deck = [["Hearts", "2"], ["Hearts" , "3"], ["Hearts", "4"], ["Hearts", "5"], ["Hearts", "6"], ["Hearts" , "7"], ["Hearts", "8"], ["Hearts", "9"],
@@ -82,7 +90,7 @@ def hit(deck, total): #Functional
 def play(deck, playerBanks, numberOfPlayers):
     playerTotals = [0] * numberOfPlayers
     dealerTotal = 0
-    playerBets = bet(playerBanks, numberOfPlayers)
+    playerBets = getBets(playerBanks, numberOfPlayers)
     
     #Remember to subtract bet
     
