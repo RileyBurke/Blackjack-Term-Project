@@ -2,32 +2,17 @@ import random
 import csv
 import sys
 
-def faceValue(drawnCard, total):
-    if card[1] == "2":
-        cardValue = 2
-    elif card[1] == "3":
-        cardValue = 3
-    elif card[1] == "4":
-        cardValue = 4
-    elif card[1] == "5":
-        cardValue = 5
-    elif card[1] == "5":
-        cardValue = 6
-    elif card[1] == "6":
-        cardValue = 7
-    elif card[1] == "7":
-        cardValue = 8
-    elif card[1] == "8":
-        cardValue = 9
-    elif card[1] == "9":
-        cardValue = 9
-    elif card[1] == "10" or card[1] == "Jack" or card[1] == "Queen" or card[1] == "King":
+def getCardValue(drawnCard, total): #Untested
+    if drawnCard[1] == "2" or card[1] == "3" or card[1] == "4" or card[1] == "5" or card[1] == "6" or card[1] == "7" or card[1] == "8" or card[1] == "9":
+        cardValue = int(card[1])
+    elif drawnCard[1] == "10" or card[1] == "Jack" or card[1] == "Queen" or card[1] == "King":
         cardValue = 10
-    elif card[1] == "Ace":
+    elif drawnCard[1] == "Ace": #1 or 11 based upon current total
         if total >= 11:
             cardValue = 1
         else:
             cardValue = 11
+    return cardValue
 
 def shuffleDeck(deck):   #Functional
     deck.clear()
@@ -88,9 +73,9 @@ def checkBalance(playerBank):
     
 def payout(bet, playerBank, total): #3:2 for 21, 1:1 for no blackjack    Riley
     if total == 21:
-        payout = round(bet * 2.5,2)
+        payout = round(bet * 2.5, 2)
     else:
-        payout = round(bet * 2,2)
+        payout = round(bet * 2, 2)
     playerBank += payout
     return playerBank
         
@@ -127,13 +112,6 @@ def main():
             break
         except ValueError:
             print("Invalid option")
-
-                    
-    
-    print(deck)         #Testing deck
-    print(len(deck))
-    shuffleDeck(deck)
-    print(deck)
 
 if __name__ == "__main__":
     main()
