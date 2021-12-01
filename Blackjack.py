@@ -105,7 +105,19 @@ def greeting():
     print()
 
 def addFunds(playerBank): #Nick
-    pass
+    while True:
+        try:
+            added_funds = int(input("How much money would you like to add? (1 - 1000): $"))
+            if added_funds < 0 or added_funds > 1000:
+                print("Invalid amount entered, try again.")
+            else:
+                print("Added $" + str(added_funds) + " to your bank.")
+                playerBank+=added_funds
+                break
+        except ValueError:
+            print("Invalid integer amount entered, try again.")
+    print("You now have $ " +str(playerBank) " in funds.")
+    return playerBank
 
 def enterCommand(command, playerBank):
     pass
@@ -131,6 +143,10 @@ def main():
     numberOfPlayers = setNumberOfPlayers()
     playerBank = int(input("How much money would you like to enter?: $"))
     print()
+    #Testing add funds
+    playerBank = addFunds(playerBank)
+    checkBalance(playerBank)
+    
     mainMenu()
     while True:
         try:
