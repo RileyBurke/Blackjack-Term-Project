@@ -44,7 +44,7 @@ def saveDealerStatistics(dealerStats): #Untested
         print("An unexpected exception occured - closing program")
         sys.exit()
 
-def getBets(playerBanks, numberOfPlayers): #To be fixed for list banks
+def getBets(playerBanks, numberOfPlayers): #untested
     playerBets = []
     counter = 0
     for counter in range(1, numberOfPlayers):
