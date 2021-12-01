@@ -2,6 +2,33 @@ import random
 import csv
 import sys
 
+def faceValue(drawnCard, total):
+    if card[1] == "2":
+        cardValue = 2
+    elif card[1] == "3":
+        cardValue = 3
+    elif card[1] == "4":
+        cardValue = 4
+    elif card[1] == "5":
+        cardValue = 5
+    elif card[1] == "5":
+        cardValue = 6
+    elif card[1] == "6":
+        cardValue = 7
+    elif card[1] == "7":
+        cardValue = 8
+    elif card[1] == "8":
+        cardValue = 9
+    elif card[1] == "9":
+        cardValue = 9
+    elif card[1] == "10" or card[1] == "Jack" or card[1] == "Queen" or card[1] == "King":
+        cardValue = 10
+    elif card[1] == "Ace":
+        if total >= 11:
+            cardValue = 1
+        else:
+            cardValue = 11
+
 def shuffleDeck(deck):   #Functional
     deck.clear()
     deckOfCards(deck)
