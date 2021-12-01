@@ -70,8 +70,10 @@ def deckOfCards(deck):    #Functional
             ["Spades", "10"], ["Spades" , "Jack"], ["Spades", "Queen"], ["Spades", "King"], ["Spades", "Ace"]]
     deck += hearts + diamonds + clubs + spades
     
-def hit(): #Daniel
-    pass
+def hit():
+    player_card = random.choice(deck)
+    player_cards.append(player_card)
+    deck.remove(player_card)
 
 def stand():
     pass
