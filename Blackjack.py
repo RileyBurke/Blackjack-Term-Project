@@ -44,7 +44,8 @@ def saveDealerStatistics(dealerStats): #Untested
         print("An unexpected exception occured - closing program")
         sys.exit()
 
-def bet(playerBanks, numberOfPlayers): #To be fixed for list banks
+def getBets(playerBanks, numberOfPlayers): #To be fixed for list banks
+    playerBets = []
     counter = 0
     for counter in range(1, numberOfPlayers):
         while True:  
@@ -55,7 +56,7 @@ def bet(playerBanks, numberOfPlayers): #To be fixed for list banks
                     continue
                 elif bet <= playerBanks[counter]:
                     playerBanks[counter] - bet
-                    return bet
+                    playerBets.append(bet)
                 else:
                     print("Not enough funds. You have $" + str(playerBanks[counter]))
                     print()
@@ -67,6 +68,7 @@ def bet(playerBanks, numberOfPlayers): #To be fixed for list banks
                 print("An unexpected exception occured")
                 print()
                 continue
+    return playerBets
 
 def deckOfCards():    #Functional
     deck = [["Hearts", "2"], ["Hearts" , "3"], ["Hearts", "4"], ["Hearts", "5"], ["Hearts", "6"], ["Hearts" , "7"], ["Hearts", "8"], ["Hearts", "9"],
@@ -88,7 +90,7 @@ def hit(deck, total): #Functional
 def play(deck, playerBanks, numberOfPlayers):
     playerTotals = [0] * numberOfPlayers
     dealerTotal = 0
-    playerBets = bet(playerBanks, numberOfPlayers)
+    playerBets = getBets(playerBanks, numberOfPlayers)
     
     #Remember to subtract bet
     
