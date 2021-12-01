@@ -59,9 +59,14 @@ def checkBalance(playerBank):
     print("You have $" + str(playerBank) + " in funds.")
     print()
     
-def payout(): #3:2 for 21, 1:1 for no blackjack    Riley
-    pass
-
+def payout(bet, playerBank, total): #3:2 for 21, 1:1 for no blackjack    Riley
+    if total == 21:
+        payout = round(bet * 2.5,2)
+    else:
+        payout = round(bet * 2,2)
+    playerBank += payout
+    return playerBank
+        
 def mainMenu():
     print("Blackjack")
     print()
