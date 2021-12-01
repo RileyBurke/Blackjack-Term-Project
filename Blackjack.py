@@ -98,11 +98,25 @@ def addFunds(playerBank): #Nick
 def enterCommand(command, playerBank):
     pass
 
+def setNumberOfPlayers():
+    while True:
+        try:
+            numberOfPlayers = int(input("How many players? (1-5): "))
+            if numberOfPlayers > 0 and numberOfPlayers < 6:
+                return numberOfPlayers
+                break
+            else:
+                print("Invalid number of players. Must be a number from 1 to 5.")
+                continue
+        except ValueError:
+            print("Invalid number of players. Must be a number from 1 to 5.")
+
 def main():
     deck = []
     dealerStats = loadDealerStatistics()
     deckOfCards(deck)
     greeting()
+    numberOfPlayers = setNumberOfPlayers()
     playerBank = int(input("How much money would you like to enter?: $"))
     print()
     mainMenu()
