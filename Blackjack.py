@@ -44,31 +44,28 @@ def saveDealerStatistics(dealerStats): #Untested
         print("An unexpected exception occured - closing program")
         sys.exit()
 
-def getBets(playerBanks, numberOfPlayers): #untested
-    playerBets = []
+def getBets(playerBanks, numberOfPlayers): #Functional
+    playerBets = [0] * numberOfPlayers
     counter = 0
-    for counter in range(1, numberOfPlayers):
-        while True:  
+    for player in playerBets:
+        while True:
             try:
-                bet = int(input("Enter a bet between $5 and $1000: $"))
-                if bet < 5 or bet > 1000:
+                playerBets[counter] = int(input("Player " + str(counter + 1) + " - How much money would you like to bet?: $"))
+                if playerBets[counter] < 5 or playerBets[counter] > 1000:
                     print("Invalid bet entered. Please enter a bet between $5 and $1000")
                     continue
-                elif bet <= playerBanks[counter]:
-                    playerBanks[counter] - bet
-                    playerBets.append(bet)
-                else:
+                elif playerBets[counter] > playerBanks[counter]:
                     print("Not enough funds. You have $" + str(playerBanks[counter]))
-                    print()
+                    continue
+                else:
+                    playerBanks[counter] -= playerBets[counter]
+                    counter += 1
+                    break
             except ValueError:
                 print("Invalid integer entered. Please try again")
                 print()
-                continue
-            except Exception:
-                print("An unexpected exception occured")
-                print()
-                continue
     return playerBets
+
 
 def deckOfCards():    #Functional
     deck = [["Hearts", "2"], ["Hearts" , "3"], ["Hearts", "4"], ["Hearts", "5"], ["Hearts", "6"], ["Hearts" , "7"], ["Hearts", "8"], ["Hearts", "9"],
@@ -80,31 +77,47 @@ def deckOfCards():    #Functional
             ["Spades", "8"], ["Spades", "9"], ["Spades", "10"], ["Spades" , "Jack"], ["Spades", "Queen"], ["Spades", "King"], ["Spades", "Ace"]]
     return deck
     
-def hit(deck, total): #Functional
+def hitPlayer(deck, total, counter): #Functional
     player_card = random.choice(deck)
-    print("You have drawn a " + player_card[1] + " of " + player_card[0] + ".")
+    print("Player " + str(counter + 1) + " has drawn a " + player_card[1] + " of " + player_card[0] + ".")
     card = getCardValue(player_card, total)
     deck.remove(player_card)
     return card
 
-def play(deck, playerBanks, numberOfPlayers):
+def hitDealer(deck, total): #Functional
+    player_card = random.choice(deck)
+    print("The dealer has drawn a " + player_card[1] + " of " + player_card[0] + ".")
+    card = getCardValue(player_card, total)
+    deck.remove(player_card)
+    return card
+
+def playGame(deck, playerBanks, numberOfPlayers): #Add print statements for totals, 
     playerTotals = [0] * numberOfPlayers
     dealerTotal = 0
     playerBets = getBets(playerBanks, numberOfPlayers)
-    
-    #Remember to subtract bet
-    
-    for players in playerTotals:
-        players += hit(deck)
-    dealerTotal += hit(deck)
-    for players in playerTotals:
-        players += hit(deck)
-    dealerTotal += hit(deck)
+    print()
+    initialTurn(deck, playerTotals)
+    print()
+    dealerTotal += hitDealer(deck, dealerTotal)
+    print()
+    initialTurn(deck, playerTotals)
+    print()
+    dealerTotal += hitDealer(deck, dealerTotal)
+    print()
 
-def dealerLogic(): #Goes for 17 or higher
+def gameEnd():
     pass
 
-def checkBalance(playerBanks): #Functional, change print statement to be based on number of players
+def initialTurn(deck, playerTotals): #Maybe change with logic to make applicable across all turns
+    counter = 0
+    while counter < len(playerTotals):
+        playerTotals[counter] += hitPlayer(deck, playerTotals[counter], counter)
+        counter += 1
+
+def dealerLogic(): #Goes for 17 or higher, maybe include in playGame
+    pass
+
+def checkBalance(playerBanks): #Mostly functional, change based on number of players
     playerNumber = int(input("Enter number of player to check (1-5): "))
     print("You have $" + str(playerBanks[playerNumber - 1]) + " in funds.")
     print()
@@ -130,7 +143,7 @@ def greeting(): #Functional
     print("Welcome to the Eric Stock Casino!")
     print()
 
-def addFunds(playerBanks): #Funtional, change print statement to be based on number of players
+def addFunds(playerBanks): #Mostly functional, change based on number of players
     playerNumber = int(input("Enter which player to add funds to (1-5): "))
     while True:
         try:
@@ -148,9 +161,10 @@ def addFunds(playerBanks): #Funtional, change print statement to be based on num
 def enterCommand(deck, playerBanks, numberOfPlayers):
     while True:
         try:
-            command = int(input("Choose an option (1-4)"))
+            command = int(input("Choose an option (1-4): "))
+            print()
             if command == 1:
-                play(deck, playerBanks, numberOfPlayers)
+                playGame(deck, playerBanks, numberOfPlayers)
             elif command == 2:
                 checkBalance(playerBanks) #Add number of players for if statements?
             elif command == 3:
@@ -159,69 +173,40 @@ def enterCommand(deck, playerBanks, numberOfPlayers):
                 break
             else:
                 print("Not a valid command.")
+                print()
                 continue
         except ValueError:
             print("Invalid option")
+            print()
 
 def setNumberOfPlayers(): #Functional
     while True:
         try:
             numberOfPlayers = int(input("How many players? (1-5): "))
             if numberOfPlayers > 0 and numberOfPlayers < 6:
+                print()
                 return numberOfPlayers
-                break
             else:
                 print("Invalid number of players. Must be a number from 1 to 5.")
+                print()
                 continue
         except ValueError:
             print("Invalid number of players. Must be a number from 1 to 5.")
 
-def setPlayerBanks(numberOfPlayers): #1-5 players banks
-    playerBanks = []
-    if numberOfPlayers == 1:
+def setPlayerBanks(numberOfPlayers): #Functional
+    playerBanks = [0] * numberOfPlayers
+    counter = 0
+    for player in playerBanks:
         while True:
             try:
-                playerOneBank = int(input("How much money would you like to enter for player one?: $"))
-                playerBanks.append(playerOneBank)
-                if playerOneBank > 5:
+                playerBanks[counter] = int(input("How much money would you like to enter for player " + str(counter + 1) + "?: $"))
+                if playerBanks[counter] >= 5:
+                    counter += 1
                     break
                 else:
                     print("Not enough money to place a bet.")
             except ValueError:
                 print("Invalid amount, please try again.")
-    elif numberOfPlayers == 2:
-        playerOneBank = int(input("How much money would you like to enter for player one?: $"))
-        playerBanks.append(playerOneBank)
-        
-        playerTwoBank = int(input("How much money would you like to enter for player two?: $"))
-        playerBanks.append(playerTwoBank)
-    elif numberOfPlayers == 3:
-        playerOneBank = int(input("How much money would you like to enter for player one?: $"))
-        playerTwoBank = int(input("How much money would you like to enter for player two?: $"))
-        playerThreeBank = int(input("How much money would you like to enter for player three?: $"))
-        playerBanks.append(playerOneBank)
-        playerBanks.append(playerTwoBank)
-        playerBanks.append(playerThreeBank)
-    elif numberOfPlayers == 4:
-        playerOneBank = int(input("How much money would you like to enter for player one?: $"))
-        playerTwoBank = int(input("How much money would you like to enter for player two?: $"))
-        playerThreeBank = int(input("How much money would you like to enter for player three?: $"))
-        playerFourBank = int(input("How much money would you like to enter for player four?: $"))
-        playerBanks.append(playerOneBank)
-        playerBanks.append(playerTwoBank)
-        playerBanks.append(playerThreeBank)
-        playerBanks.append(playerFourBank)
-    else:
-        playerOneBank = int(input("How much money would you like to enter for player one?: $"))
-        playerTwoBank = int(input("How much money would you like to enter for player two?: $"))
-        playerThreeBank = int(input("How much money would you like to enter for player three?: $"))
-        playerFourBank = int(input("How much money would you like to enter for player four?: $"))
-        playerFiveBank = int(input("How much money would you like to enter for player five?: $"))
-        playerBanks.append(playerOneBank)
-        playerBanks.append(playerTwoBank)
-        playerBanks.append(playerThreeBank)
-        playerBanks.append(playerFourBank)
-        playerBanks.append(playerFiveBank)
     return playerBanks
 
 def main():
