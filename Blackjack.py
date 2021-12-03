@@ -16,7 +16,7 @@ def getCardValue(drawnCard, total): #Functional
 
 def shuffleDeck(deck):   #Functional
     deck.clear()
-    deckOfCards(deck)
+    deckOfCards()
     random.shuffle(deck)
 
 def loadDealerStatistics(): #Untested
@@ -78,11 +78,27 @@ def deckOfCards():    #Functional
     return deck
     
 def hitPlayer(deck, total, counter, turnNumber): #Functional
-    player_card = random.choice(deck)
-    card = getCardValue(player_card, total)
-    deck.remove(player_card)
-    print("Player " + str(counter + 1) + " has drawn a " + player_card[1] + " of " + player_card[0] + ".")
-    return card
+    while True:
+        if turnNumber == 1:
+            player_card = random.choice(deck)
+            print("Player " + str(counter + 1) + " has drawn a " + player_card[1] + " of " + player_card[0] + ".")
+            card = getCardValue(player_card, total)
+            deck.remove(player_card)
+            total += card
+            return total
+        else:
+            player_card = random.choice(deck)
+            print("Player " + str(counter + 1) + " has drawn a " + player_card[1] + " of " + player_card[0] + ".")
+            card = getCardValue(player_card, total)
+            deck.remove(player_card)
+            total += card
+            if total == 21:
+                print("Player has blackjack.")
+                return total
+            elif total > 21:
+                print("Player has busted out.")
+                return total
+            return total
 
 def hitDealer(deck, dealerTotal, turnNumber): #Functional
     if turnNumber == 1:
@@ -93,17 +109,24 @@ def hitDealer(deck, dealerTotal, turnNumber): #Functional
         dealerTotal += card
         return dealerTotal
     else:
-        if dealerTotal < 17:
-            player_card = random.choice(deck)
-            print("The dealer has drawn a " + player_card[1] + " of " + player_card[0] + ".")
-            card = getCardValue(player_card, dealerTotal)
-            deck.remove(player_card)
-            dealerTotal += card
-            print("Total is now " + str(dealerTotal) + ".")
-            return dealerTotal
-        else:
-            print("Dealer stands with " + str(dealerTotal))
-            return dealerTotal
+        while True:
+            if dealerTotal < 17:
+                player_card = random.choice(deck)
+                print("The dealer has drawn a " + player_card[1] + " of " + player_card[0] + ".")
+                card = getCardValue(player_card, dealerTotal)
+                deck.remove(player_card)
+                dealerTotal += card
+                print("Total is now " + str(dealerTotal) + ".")
+                return dealerTotal
+            elif dealerTotal == 21:
+                print("Dealer has blackjack.")
+                return dealerTotal
+            elif dealerTotal > 21:
+                print("Dealer has busted out.")
+                return dealerTotal
+            else:
+                print("Dealer stands with " + str(dealerTotal))
+                return dealerTotal
 
 def playGame(deck, playerBanks, numberOfPlayers):
     playerTotals = [0] * numberOfPlayers
@@ -112,68 +135,80 @@ def playGame(deck, playerBanks, numberOfPlayers):
     counter = 0
     playerBets = getBets(playerBanks, numberOfPlayers)
     print()
-    while True:
-        turnNumber = turn(deck, playerTotals, turnNumber, counter, playerBanks, playerBets)
-        if turnNumber <= 2:
-            dealerTotal = hitDealer(deck, dealerTotal, turnNumber)
-        print()
-        for players in playerTotals:
-            if playerTotals[counter] == 21:
+    choice = "y"
+    while choice.lower() == "y":
+        while counter < len(playerTotals): #Loops through each player for a given turn
+            if turnNumber == 2:     #Turn number 2
+                playerTotals[counter] = hitPlayer(deck, playerTotals[counter], counter, turnNumber)
+                print("Total is now " + str(playerTotals[counter]) + ".")
+                print()
+                counter += 1
+            elif turnNumber > 2:    #Turn >2, gives hit/stand options.
+                playerTotals[counter] = gameOptions(deck, playerTotals, counter, turnNumber, playerBanks, playerBets)
+                print("Total is now " + str(playerTotals[counter]) + ".")
+                print()
+                counter += 1
+                if counter == len(playerTotals):
+                    break
+            else:                   #Turn number 1
+                playerTotals[counter] = hitPlayer(deck, playerTotals[counter], counter, turnNumber)
+                print()
+                counter += 1
+            if turnNumber == 1:
+                dealerTotal = hitDealer(deck, dealerTotal, turnNumber)
+            turnNumber += 1
+            counter = 0
+            print()
+        dealerTotal = hitDealer(deck, dealerTotal, turnNumber)
+
+
+        payoutCounter = 0
+        for total in playerTotals:
+            if total == 21 and dealerTotal != 21:       #Player wins with blackjack
                 print("Player " + str(counter + 1) + " has blackjack!")
-                playerBanks[counter] = payout(playerBets[counter], playerBanks[counter], playerTotals[counter], counter)
-            elif playerTotals[counter] > 21:
+                playerBanks[payoutCounter] = payout(playerBets[payoutCounter], playerBanks[payoutCounter], total, payoutCounter)
+            elif total == 21 and dealerTotal == 21:     #Player and dealer tie with blackjack
+                print("Tied dealer, bet returned.")
+                playerBanks[payoutCounter] += playerBets[payoutCounter]
+            elif total > 21:                            #Player busts
                 print("Player " + str(counter + 1) + " has busted out.")
-    while True:
-        hitDealer(deck, total, turnNumber)
-        if dealerTotal == 21:
-            print("Dealer has blackjack.")
-            break
-        elif dealerTotal > 21:
-            print("Dealer has busted out.")
-            for player in playerBanks:
-                payout(playerBets, playerBanks, playerTotals, counter)
-            break
-    print()
-    shuffleDeck(deck)
+            elif total < 21:
+                if dealerTotal == total:                #Player and dealer tie
+                    print("Tied dealer, bet returned.")
+                    playerBanks[payoutCounter] += playerBets[payoutCounter]
+                elif dealerTotal > total:               #Dealer wins with higher score
+                    print("Dealer wins.")
+                else:                                   #Player wins with higher score
+                    print("Player " + str(payoutCounter+1) + " wins.")
+                    playerBanks[payoutCounter] = payout(playerBets[payoutCounter], playerBanks[payoutCounter], total, payoutCounter)
+                
+        
+            print()
+            shuffleDeck(deck)
+            choice = input("Play again? (y/n): ")
+    
 
 def gameOptions(deck, playerTotals, counter, turnNumber, playerBanks, playerBets):
     print("Player " + str(counter + 1))
     while True:
         option = input("Hit or Stand: ")
         if option.title() == "Hit":
-            playerTotals[counter] += hitPlayer(deck, playerTotals[counter], counter , turnNumber)
+            playerTotals[counter] = hitPlayer(deck, playerTotals[counter], counter, turnNumber)
             if playerTotals[counter] == 21:
                 print("Player " + str(counter + 1) + " has blackjack!")
-                payout(playerBets[counter], playerBanks[counter], playerTotals[counter], counter)
-                break
+                return playerTotals[counter]
             elif playerTotals[counter] > 21:
                 print("Player " + str(counter + 1) + " has busted out.")
-                break
+                return playerTotals[counter]
             else:
                 print("Total is now " + str(playerTotals[counter]) + ".")
+                continue
         elif option.title() == "Stand":
             print("Standing at " + str(playerTotals[counter]))
-            break
+            return playerTotals[counter]
         else:
             print("Invalid option.")
             continue
-
-def turn(deck, playerTotals, turnNumber, counter, playerBanks, playerBets):
-    while counter < len(playerTotals):
-        if turnNumber == 2:
-            playerTotals[counter] += hitPlayer(deck, playerTotals[counter], counter , turnNumber)
-            print("Total is now " + str(playerTotals[counter]) + ".")
-            print()
-        elif turnNumber > 2:
-            gameOptions(deck, playerTotals, counter, turnNumber, playerBanks, playerBets)
-            print("Total is now " + str(playerTotals[counter]) + ".")
-            print()
-        else:
-            playerTotals[counter] += hitPlayer(deck, playerTotals[counter], counter , turnNumber)
-            print()
-        counter += 1
-    turnNumber += 1
-    return turnNumber
 
 def checkBalance(playerBanks): #Functional
     while True:
