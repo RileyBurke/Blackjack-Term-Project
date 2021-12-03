@@ -84,12 +84,26 @@ def hitPlayer(deck, total, counter, turnNumber): #Functional
     print("Player " + str(counter + 1) + " has drawn a " + player_card[1] + " of " + player_card[0] + ".")
     return card
 
-def hitDealer(deck, total): #Functional
-    player_card = random.choice(deck)
-    print("The dealer has drawn a " + player_card[1] + " of " + player_card[0] + ".")
-    card = getCardValue(player_card, total)
-    deck.remove(player_card)
-    return card
+def hitDealer(deck, dealerTotal, turnNumber): #Functional
+    if turnNumber == 1:
+        player_card = random.choice(deck)
+        print("The dealer has drawn a " + player_card[1] + " of " + player_card[0] + ".")
+        card = getCardValue(player_card, dealerTotal)
+        deck.remove(player_card)
+        dealerTotal += card
+        return dealerTotal
+    else:
+        if dealerTotal < 17:
+            player_card = random.choice(deck)
+            print("The dealer has drawn a " + player_card[1] + " of " + player_card[0] + ".")
+            card = getCardValue(player_card, dealerTotal)
+            deck.remove(player_card)
+            dealerTotal += card
+            print("Total is now " + str(dealerTotal) + ".")
+            return dealerTotal
+        else:
+            print("Dealer stands with " + str(dealerTotal))
+            return dealerTotal
 
 def playGame(deck, playerBanks, numberOfPlayers):
     playerTotals = [0] * numberOfPlayers
@@ -100,7 +114,8 @@ def playGame(deck, playerBanks, numberOfPlayers):
     print()
     while True:
         turnNumber = turn(deck, playerTotals, turnNumber, counter, playerBanks, playerBets)
-        dealerTotal += hitDealer(deck, dealerTotal)
+        if turnNumber <= 2:
+            dealerTotal = hitDealer(deck, dealerTotal, turnNumber)
         print()
         for players in playerTotals:
             if playerTotals[counter] == 21:
@@ -108,6 +123,8 @@ def playGame(deck, playerBanks, numberOfPlayers):
                 playerBanks[counter] = payout(playerBets[counter], playerBanks[counter], playerTotals[counter], counter)
             elif playerTotals[counter] > 21:
                 print("Player " + str(counter + 1) + " has busted out.")
+    while True:
+        hitDealer(deck, total, turnNumber)
         if dealerTotal == 21:
             print("Dealer has blackjack.")
             break
@@ -115,8 +132,7 @@ def playGame(deck, playerBanks, numberOfPlayers):
             print("Dealer has busted out.")
             for player in playerBanks:
                 payout(playerBets, playerBanks, playerTotals, counter)
-        
-        
+            break
     print()
     shuffleDeck(deck)
 
@@ -142,29 +158,22 @@ def gameOptions(deck, playerTotals, counter, turnNumber, playerBanks, playerBets
             print("Invalid option.")
             continue
 
-def gameEnd():
-    pass
-
-
 def turn(deck, playerTotals, turnNumber, counter, playerBanks, playerBets):
     while counter < len(playerTotals):
-            if turnNumber == 2:
-                playerTotals[counter] += hitPlayer(deck, playerTotals[counter], counter , turnNumber)
-                print("Total is now " + str(playerTotals[counter]) + ".")
-                print()
-            elif turnNumber > 2:
-                gameOptions(deck, playerTotals, counter, turnNumber, playerBanks, playerBets)
-                print("Total is now " + str(playerTotals[counter]) + ".")
-                print()
-            else:
-                playerTotals[counter] += hitPlayer(deck, playerTotals[counter], counter , turnNumber)
-                print()
-            counter += 1
+        if turnNumber == 2:
+            playerTotals[counter] += hitPlayer(deck, playerTotals[counter], counter , turnNumber)
+            print("Total is now " + str(playerTotals[counter]) + ".")
+            print()
+        elif turnNumber > 2:
+            gameOptions(deck, playerTotals, counter, turnNumber, playerBanks, playerBets)
+            print("Total is now " + str(playerTotals[counter]) + ".")
+            print()
+        else:
+            playerTotals[counter] += hitPlayer(deck, playerTotals[counter], counter , turnNumber)
+            print()
+        counter += 1
     turnNumber += 1
     return turnNumber
-
-def dealerLogic(): #Goes for 17 or higher, maybe include in playGame
-    pass
 
 def checkBalance(playerBanks): #Functional
     while True:
@@ -187,12 +196,12 @@ def checkBalance(playerBanks): #Functional
             continue       
     
 def payout(playerBets, playerBanks, playerTotals, counter): #Functional
-    if playerTotals[counter] == 21:
+    if playerTotals == 21:
         payout = round(playerBets[counter] * 2.5, 2)
     else:
         payout = round(playerBets[counter] * 2, 2)
-    playerBanks[counter] += payout
-    print("Bet: $" + str(playerBets[counter]) + "  Winnings: $" + str(payout) + "  New total: $" + str(playerBanks[counter]))
+    playerBanks += payout
+    print("Bet: $" + str(playerBets[counter]) + "  Winnings: $" + str(payout) + "  New total: $" + str(playerBanks))
         
 def mainMenu(): #Functional
     print("Blackjack")
