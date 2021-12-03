@@ -230,7 +230,9 @@ def checkBalance(playerBanks): #Functional
         else:
             playerNumber = 1
         if playerNumber <= len(playerBanks) and playerNumber > 0:
+            print("-------------------------")
             print("You have $" + str(playerBanks[playerNumber - 1]) + " in funds.")
+            print("-------------------------")
             print()
             break
         else:
@@ -247,17 +249,19 @@ def payout(playerBets, playerBanks, playerTotals, counter): #Functional
     print("Bet: $" + str(playerBets[counter]) + "  Winnings: $" + str(payout) + "  New total: $" + str(playerBanks))
         
 def mainMenu(): #Functional
-    print("Blackjack")
-    print()
+    print("-------------------------")
+    print("Eric Stock's Blackjack")
+    print("-------------------------")
     print("1. Play")
     print("2. Check balance")
     print("3. Add funds")
     print("4. Exit")
-    print()
+    print("-------------------------")
 
 def greeting(): #Functional
+    print("-------------------------")
     print("Welcome to the Eric Stock Casino!")
-    print()
+    print("-------------------------")
 
 def addFunds(playerBanks): #Functional
     while True:
@@ -277,7 +281,10 @@ def addFunds(playerBanks): #Functional
                     print("Invalid amount entered, try again.")
                 else:
                     playerBanks[playerNumber - 1] += addedAmount
+                    print("-------------------------")
                     print("Added $" + str(addedAmount) + " to your bank.")
+                    print("-------------------------")
+                    print()
                     break
             except ValueError:
                 print("Invalid integer amount entered.")
@@ -350,8 +357,6 @@ def main():
     print()
     mainMenu()
     enterCommand(deck, playerBanks, numberOfPlayers)
-    print("Bye!")
     
-
 if __name__ == "__main__":
     main()
