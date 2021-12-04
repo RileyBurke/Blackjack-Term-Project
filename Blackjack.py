@@ -70,6 +70,7 @@ def getBets(playerBanks, numberOfPlayers): #Functional
             except ValueError:
                 print("Invalid integer entered. Please try again")
                 print()
+    print()
     return playerBets
 
 
@@ -128,14 +129,17 @@ def hitDealer(deck, dealerTotal, turnNumber, dealerFlag): #Functional
                 return dealerTotal, dealerFlag
             elif dealerTotal == 21:
                 print("Dealer has blackjack.")
+                print()
                 dealerFlag = False
                 return dealerTotal, dealerFlag
             elif dealerTotal > 21:
                 print("Dealer has busted out.")
+                print()
                 dealerFlag = False
                 return dealerTotal, dealerFlag
             else:
-                print("Dealer stands with " + str(dealerTotal))
+                print("Dealer stands with " + str(dealerTotal) + ".")
+                print()
                 dealerFlag = False
                 return dealerTotal, dealerFlag
 
@@ -212,10 +216,10 @@ def playGame(deck, playerBanks, numberOfPlayers):
 
         dealerStats.append(dealerWinnings)
         saveDealerStatistics(dealerStats)        
-        print()
         deck = shuffleDeck(deck)
         choice = input("Play again? (y/n): ")
-    
+        print()
+    mainMenu()
 
 def gameOptions(deck, playerTotals, counter, turnNumber, playerBanks, playerBets, playerFlags):
     print("Player " + str(counter + 1) + " - Total: " + str(playerTotals[counter]))
@@ -273,8 +277,6 @@ def payout(playerBets, playerBanks, playerTotals, counter): #Functional
     return payout
         
 def mainMenu(): #Functional
-    print("Blackjack")
-    print()
     print("1. Play")
     print("2. Check balance")
     print("3. Add funds")
@@ -283,6 +285,8 @@ def mainMenu(): #Functional
 
 def greeting(): #Functional
     print("Welcome to the Eric Stock Casino!")
+    print()
+    print("Blackjack")
     print()
 
 def addFunds(playerBanks): #Functional
@@ -321,7 +325,6 @@ def enterCommand(deck, playerBanks, numberOfPlayers): #Functional
     while True:
         try:
             command = int(input("Choose an option (1-4): "))
-            print()
             if command == 1:
                 playGame(deck, playerBanks, numberOfPlayers)
             elif command == 2:
