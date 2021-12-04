@@ -192,7 +192,7 @@ def playGame(deck, playerBanks, numberOfPlayers):
         for total in playerTotals:
             if total == 21 and dealerTotal != 21:                             #Player wins with blackjack
                 print("Player " + str(payoutCounter + 1) + " has blackjack!")
-                dealerWinnings -= payout(playerBets[payoutCounter], playerBanks[payoutCounter], total, payoutCounter)
+                dealerWinnings -= payout(playerBets[payoutCounter], playerBanks, total, payoutCounter)
             elif total == 21 and dealerTotal == 21:                           #Player and dealer tie with blackjack
                 print("Player " + str(payoutCounter + 1) + ": Tied dealer, bet returned.")
                 playerBanks[payoutCounter] += playerBets[payoutCounter]
@@ -208,7 +208,7 @@ def playGame(deck, playerBanks, numberOfPlayers):
                     dealerWinnings += playerBets[payoutCounter]
                 else:                                                         #Player wins with higher score
                     print("Player " + str(payoutCounter + 1) + " wins.")
-                    dealerWinnings -= payout(playerBets[payoutCounter], playerBanks[payoutCounter], total, payoutCounter)
+                    dealerWinnings -= payout(playerBets[payoutCounter], playerBanks, total, payoutCounter)
 
             payoutCounter += 1
             print()
@@ -274,8 +274,8 @@ def payout(playerBets, playerBanks, playerTotals, counter): #Functional
         payout = round(playerBets * 2.5, 2)
     else:
         payout = round(playerBets * 2, 2)
-    playerBanks += payout
-    print("Bet: $" + str(playerBets) + "  Winnings: $" + str(payout) + "  New total: $" + str(playerBanks))
+    playerBanks[counter] += payout
+    print("Bet: $" + str(playerBets) + "  Winnings: $" + str(payout) + "  New total: $" + str(playerBanks[counter]))
     return payout
         
 def mainMenu(): #Functional
