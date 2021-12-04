@@ -212,7 +212,7 @@ def playGame(deck, playerBanks, numberOfPlayers):
 
             payoutCounter += 1
             print()
-            total = 0
+            #total = 0
 
         dealerStats.append(dealerWinnings)
         saveDealerStatistics(dealerStats)        
@@ -220,6 +220,7 @@ def playGame(deck, playerBanks, numberOfPlayers):
         choice = input("Play again? (y/n): ")
         print()
     mainMenu()
+    return deck
 
 def gameOptions(deck, playerTotals, counter, turnNumber, playerBanks, playerBets, playerFlags):
     print("Player " + str(counter + 1) + " - Total: " + str(playerTotals[counter]))
@@ -328,7 +329,7 @@ def enterCommand(deck, playerBanks, numberOfPlayers): #Functional
         try:
             command = int(input("Choose an option (1-4): "))
             if command == 1:
-                playGame(deck, playerBanks, numberOfPlayers)
+                deck = playGame(deck, playerBanks, numberOfPlayers)
             elif command == 2:
                 checkBalance(playerBanks) 
             elif command == 3:
