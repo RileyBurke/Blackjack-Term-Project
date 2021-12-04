@@ -1,5 +1,4 @@
 import random
-import csv
 import sys
 
 def getCardValue(drawnCard, total): #Functional
@@ -20,11 +19,12 @@ def shuffleDeck(deck):   #Functional
     random.shuffle(deck)
     return deck
 
-def loadDealerStatistics(): #Untested
+def loadDealerStatistics(): #Functional
     dealerStats = []
     try:
-        with open ("dealerStats.csv", newline = "") as file:
+        with open ("dealerStats.txt") as file:
             for row in file:
+                row = row.replace("\n","")
                 dealerStats.append(row)
     except FileNotFoundError:
         pass
@@ -36,11 +36,11 @@ def loadDealerStatistics(): #Untested
         sys.exit()
     return dealerStats
             
-def saveDealerStatistics(dealerStats): #Untested
+def saveDealerStatistics(dealerStats): #Functional
     try:
-        with open("dealerStats.csv", "w", newline="") as file:
-            writer = csv.writer(file)
-            writer.writerows(dealerStats)   
+        with open("dealerStats.txt", "w") as file:
+            for stats in dealerStats:
+                file.write(str(stats) + "\n")
     except Exception:
         print("An unexpected exception occured - closing program")
         sys.exit()
@@ -140,6 +140,7 @@ def hitDealer(deck, dealerTotal, turnNumber, dealerFlag): #Functional
                 return dealerTotal, dealerFlag
 
 def playGame(deck, playerBanks, numberOfPlayers):
+    dealerStats = loadDealerStatistics()
     print()
     choice = "y"
     while choice.lower() == "y":
@@ -179,33 +180,38 @@ def playGame(deck, playerBanks, numberOfPlayers):
             if not any(playerFlags): #Checks for any True flags, if all flags are false the game will end.
                 playerFlag = False
                 
-        #Write a loop for the dealer that exits once >17, bust, or blackjack
         while dealerFlag == True:
             dealerTotal, dealerFlag = hitDealer(deck, dealerTotal, turnNumber, dealerFlag)
 
         payoutCounter = 0
+        dealerWinnings = 0
         for total in playerTotals:
-            if total == 21 and dealerTotal != 21:       #Player wins with blackjack
+            if total == 21 and dealerTotal != 21:                             #Player wins with blackjack
                 print("Player " + str(payoutCounter + 1) + " has blackjack!")
-                payout(playerBets[payoutCounter], playerBanks[payoutCounter], total, payoutCounter)
-            elif total == 21 and dealerTotal == 21:     #Player and dealer tie with blackjack
+                dealerWinnings -= payout(playerBets[payoutCounter], playerBanks[payoutCounter], total, payoutCounter)
+            elif total == 21 and dealerTotal == 21:                           #Player and dealer tie with blackjack
                 print("Player " + str(payoutCounter + 1) + ": Tied dealer, bet returned.")
                 playerBanks[payoutCounter] += playerBets[payoutCounter]
-            elif total > 21:                            #Player busts
+            elif total > 21:                                                  #Player busts
                 print("Player " + str(payoutCounter + 1) + " has busted out.")
+                dealerWinnings += playerBets[payoutCounter]
             elif total < 21:
-                if dealerTotal == total:                #Player and dealer tie
+                if dealerTotal == total:                                      #Player and dealer tie
                     print("Player " + str(payoutCounter + 1) + ": Tied dealer, bet returned.")
                     playerBanks[payoutCounter] += playerBets[payoutCounter]
                 elif dealerTotal <= 21 and dealerTotal > total:               #Dealer wins with higher score
                     print("Player " + str(payoutCounter + 1) + ": Dealer wins.")
-                else:                                   #Player wins with higher score
+                    dealerWinnings += playerBets[payoutCounter]
+                else:                                                         #Player wins with higher score
                     print("Player " + str(payoutCounter + 1) + " wins.")
-                    payout(playerBets[payoutCounter], playerBanks[payoutCounter], total, payoutCounter)
+                    dealerWinnings -= payout(playerBets[payoutCounter], playerBanks[payoutCounter], total, payoutCounter)
+
             payoutCounter += 1
             print()
             total = 0
-                
+
+        dealerStats.append(dealerWinnings)
+        saveDealerStatistics(dealerStats)        
         print()
         deck = shuffleDeck(deck)
         choice = input("Play again? (y/n): ")
@@ -264,6 +270,7 @@ def payout(playerBets, playerBanks, playerTotals, counter): #Functional
         payout = round(playerBets * 2, 2)
     playerBanks += payout
     print("Bet: $" + str(playerBets) + "  Winnings: $" + str(payout) + "  New total: $" + str(playerBanks))
+    return payout
         
 def mainMenu(): #Functional
     print("Blackjack")
@@ -310,6 +317,7 @@ def addFunds(playerBanks): #Functional
     print()
 
 def enterCommand(deck, playerBanks, numberOfPlayers): #Functional
+    mainMenu()
     while True:
         try:
             command = int(input("Choose an option (1-4): "))
@@ -361,13 +369,11 @@ def setPlayerBanks(numberOfPlayers): #Functional
     return playerBanks
 
 def main():
-    dealerStats = loadDealerStatistics()
     deck = deckOfCards()
     greeting()
     numberOfPlayers = setNumberOfPlayers()
     playerBanks = setPlayerBanks(numberOfPlayers)
     print()
-    mainMenu()
     enterCommand(deck, playerBanks, numberOfPlayers)
     print("Bye!")
     
