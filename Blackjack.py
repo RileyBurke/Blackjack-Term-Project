@@ -248,6 +248,7 @@ def gameOptions(deck, playerTotals, counter, turnNumber, playerBanks, playerBets
             continue
 
 def checkBalance(playerBanks): #Functional
+    print()
     while True:
         if len(playerBanks) > 1:
             try:
@@ -290,6 +291,7 @@ def greeting(): #Functional
     print()
 
 def addFunds(playerBanks): #Functional
+    print()
     while True:
         if len(playerBanks) > 1:
             try:
