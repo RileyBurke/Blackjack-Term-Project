@@ -39,7 +39,6 @@ def addFunds(playerBanks, playerNumber):
             except ValueError:
                 print("Invalid integer amount entered.")
                 print()
-                break
         else:
             print("Invalid player number. Try again.")
             print()

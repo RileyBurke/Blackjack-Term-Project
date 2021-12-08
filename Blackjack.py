@@ -1,5 +1,4 @@
 import random
-import sys
 import Deck
 import DealerStatistics
 import Bank
@@ -28,10 +27,10 @@ def getBets(playerBanks, numberOfPlayers): #Accepts bets from each player.
                     continue
                 elif playerBets[counter] > playerBanks[counter]:
                     if playerBanks[counter] >= 5:
-                        print("Not enough funds. You have $" + str(playerBanks[counter]))
+                        print("Not enough funds. You have $" + str(playerBanks[counter]) + ".")
                         continue
                     else:
-                        print("Not enough funds. You have $" + str(playerBanks[counter]))
+                        print("Not enough funds. You have $" + str(playerBanks[counter]) + ".")
                         Bank.addFunds(playerBanks, counter+1)
                         continue
                 else:

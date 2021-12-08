@@ -1,3 +1,5 @@
+import sys
+
 def loadDealerStatistics(): #Loads the dealer statistics file to a list to be appended to.
     dealerStats = []
     try:
