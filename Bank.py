@@ -1,40 +1,43 @@
-def setPlayerBanks(numberOfPlayers): #Sets the initial values for the bank of each player.
-    playerBanks = [0] * numberOfPlayers
+def set_player_banks(number_of_players):  # Sets the initial values for the bank of each player.
+    player_banks = [0] * number_of_players
     counter = 0
-    for player in playerBanks:
+    for _ in player_banks:
         while True:
             try:
-                playerBanks[counter] = int(input("How much money would you like to enter for player " + str(counter + 1) + "?: $"))
-                if playerBanks[counter] >= 5:
+                player_banks[counter] = int(input("How much money would you like to enter for player " +
+                                                  str(counter + 1) + "?: $"))
+                if player_banks[counter] >= 5:
                     counter += 1
                     break
                 else:
                     print("Not enough money to place a bet.")
             except ValueError:
                 print("Invalid amount, please try again.")
-    return playerBanks
+    return player_banks
 
-def addFunds(playerBanks, playerNumber):
-    #Adds funds to player banks. If chosen in menu it gives an option to choose player. If player runs out of money in game it chooses the player for you before you can bet.
+
+def add_funds(player_banks, player_number):
+    # Add funds to player banks. If chosen in menu it gives an option to choose player.
+    # If player runs out of money in game it chooses the player for you before you can bet.
     print()
     while True:
-        if len(playerBanks) > 1 and playerNumber == 0:
+        if len(player_banks) > 1 and player_number == 0:
             try:
-                playerNumber = int(input("Enter which player to add funds to (1-" + str(len(playerBanks)) + "): "))
+                player_number = int(input("Enter which player to add funds to (1-" + str(len(player_banks)) + "): "))
             except ValueError:
                 print("Invalid player number. Try again.")
                 print()
                 continue
-        elif playerNumber <= len(playerBanks) and playerNumber > 0 or len(playerBanks) == 1:
-            if len(playerBanks) == 1:
-                playerNumber = 1
+        elif len(player_banks) >= player_number > 0 or len(player_banks) == 1:
+            if len(player_banks) == 1:
+                player_number = 1
             try:
-                addedAmount = int(input("How much money would you like to add?: $"))
-                if addedAmount < 0:
+                added_amount = int(input("How much money would you like to add?: $"))
+                if added_amount < 0:
                     print("Invalid amount entered, try again.")
                 else:
-                    playerBanks[playerNumber - 1] += addedAmount
-                    print("Added $" + str(addedAmount) + " to your bank.")
+                    player_banks[player_number - 1] += added_amount
+                    print("Added $" + str(added_amount) + " to your bank.")
                     break
             except ValueError:
                 print("Invalid integer amount entered.")
@@ -43,26 +46,27 @@ def addFunds(playerBanks, playerNumber):
             print("Invalid player number. Try again.")
             print()
             continue
-    print("You now have $" + str(playerBanks[playerNumber - 1]) + " in funds.")
+    print("You now have $" + str(player_banks[player_number - 1]) + " in funds.")
     print()
 
-def checkBalance(playerBanks): #Allows players to check their balance from the main menu.
+
+def check_balance(player_banks):  # Allows players to check their balance from the main menu.
     print()
     while True:
-        if len(playerBanks) > 1:
+        if len(player_banks) > 1:
             try:
-                playerNumber = int(input("Enter number of player to check (1-" + str(len(playerBanks)) + "): "))
+                player_number = int(input("Enter number of player to check (1-" + str(len(player_banks)) + "): "))
             except ValueError:
                 print("Invalid player number. Try again.")
                 print()
                 continue
         else:
-            playerNumber = 1
-        if playerNumber <= len(playerBanks) and playerNumber > 0:
-            print("You have $" + str(playerBanks[playerNumber - 1]) + " in funds.")
+            player_number = 1
+        if len(player_banks) >= player_number > 0:
+            print("You have $" + str(player_banks[player_number - 1]) + " in funds.")
             print()
             break
         else:
             print("Invalid player number. Try again.")
             print()
-            continue 
+            continue
